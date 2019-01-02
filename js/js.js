@@ -89,14 +89,31 @@ let levelUp = function () {
 };
 
 //Adding the firing functions
-let fire = function () {
-    let fireball = new FireBall("./img/fire.gif");
-    let moveUp = function () {
-        fireball.fireBall.style.top = `${fireball.fireBall.offsetTop - 10}px`
-    };
-    setInterval(moveUp, 40);
-};
 
+let fire = function (version) {
+    if(version===0){
+        let fireball = new FireBall("./img/fire.gif");
+        let moveUp = function () {
+            fireball.fireBall.style.top = `${fireball.fireBall.offsetTop - 10}px`;
+        };
+        setInterval(moveUp, 40);
+    }
+    else {
+        let fireball = new FireBall("./img/fire.gif");
+        let leftFireball = new FireBall("./img/fire.gif");
+        let rightFireball = new FireBall("./img/fire.gif");
+        leftFireball.fireBall.style.top =  `${leftFireball.fireBall.offsetTop + 54}px`;
+        rightFireball.fireBall.style.top = `${rightFireball.fireBall.offsetTop + 54}px`;
+        leftFireball.fireBall.style.left = `${leftFireball.fireBall.offsetLeft - 41}px`;
+        rightFireball.fireBall.style.left = `${rightFireball.fireBall.offsetLeft + 41}px`;
+        let updatedMoveUp = function () {
+            fireball.fireBall.style.top = `${fireball.fireBall.offsetTop - 10}px`;
+            leftFireball.fireBall.style.top = `${leftFireball.fireBall.offsetTop - 10}px`;
+            rightFireball.fireBall.style.top = `${rightFireball.fireBall.offsetTop - 10}px`;
+        };
+        setInterval(updatedMoveUp, 40)
+    }
+};
 //Falling rocks
 // ABDO PARTS
 let fallenRock = null;
@@ -249,7 +266,7 @@ let play = function() //
 //Fire checker (The checker frame is slower than the playing frame so that the spaceship fire slower than
 //the playing frames (150 ms ) this makes space between each fire
     setInterval(() => {
-        if (keyPressed["ControlLeft"]) fire()
+        if (keyPressed["ControlLeft"]) fire(0)
     }, 150);
 //THIS IS THE MAIN INTERVAL IT CHECKS FOR EVERY THING ELSE
     let playingFrames = setInterval(() => {
@@ -264,8 +281,9 @@ let play = function() //
             for (let j = 0; j < rocksArray.length; j++) { // this loops for each rock corresponding to each fireball
                 currentRock = document.getElementById(rocksArray[j].id);
                 //Check fire collision
-                if (Math.abs((currentRock.offsetTop + currentRock.offsetHeight) - currentBall.offsetTop) < 20
+                if ((currentRock.offsetTop + currentRock.offsetHeight) - currentBall.offsetTop > 8
                     && currentBall.offsetLeft >= (currentRock.offsetLeft - currentBall.offsetWidth + 5)
+                    &&(currentRock.offsetTop + currentRock.offsetHeight) - currentBall.offsetTop <30
                     && currentBall.offsetLeft <= (currentRock.offsetLeft + currentRock.offsetWidth)) {
                     currentBall.remove();
                     fireballs.splice(i, 1);
