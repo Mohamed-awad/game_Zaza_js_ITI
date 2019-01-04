@@ -7,61 +7,27 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <title>Zaza</title>
-    <style type="text/css">
-        .statusBar{
-            position: fixed; 
-            top: 0;
-            left: 0; 
-            width: 100%;
-            height: 70px;
-            background-color: #000000; 
-            z-index: 1; 
-            opacity: .5;
-            overflow: hidden;
-        }
-        #score, #live, #level{
-            height: 80%;
-            width: 200px;
-            float: left;
-            margin-left: 200px;
-            border-radius: 10px;
-            padding-bottom: 20px;
-            text-align: center;
-            font-size: 20px;
-            color: #FFF;
-            margin-top: 6px;
-        }
-        #score{
-            background-color: #9548c4;
-            border: 1px solid red;
-        }
-        #live{
-            background-color: #00AA00;
-            border: 1px solid green;
-        }
-        #level{
-            background-color: #036299;
-            border: 1px solid blue;
-        }
 
-    </style>
 </head>
 <body>
     <div id = "container" class="container-fluid">
         <div class="statusBar">
-            <div id="score">
-               <h3>Score: 0</h3>
+            <div id="score" class="tab">
+               <h3 id = "scoreValue"class="value">Score: 0</h3>
             </div>
             <div id="live">
-                <h3>Live: 10</h3>
+                <h3 id = "liveValue"class="value">Live: 10</h3>
+            </div>
+            <div id="time">
+                <h3 id = "timeValue"class="value">00:00</h3>
             </div>
             <div id="level">
-                <h3>Level: 1</h3>
+                <h3 id = "levelValue" class="value">Level: 1</h3>
             </div>
         </div>
 
         <div class="row">
-           
+
             <div id="firstz" >
                 <img src="img/firstz.png" >
             </div>
@@ -88,12 +54,14 @@
                         <button type="button" class="btn btn-warning">Exit</button>
                      </div>
         </div>
-    </div>
-  
-    <!--bootstrap libs-->
 
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap.js"></script>
+        <div id = "timer">
+
+        </div>
+    </div>
+
+
+    <!--bootstrap libs-->
     <script src="js/js.js"></script>
     
 </body>
