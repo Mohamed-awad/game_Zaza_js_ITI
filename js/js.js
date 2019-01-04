@@ -351,7 +351,3 @@ function play()
 }
 
 play();
-
-
-
-
