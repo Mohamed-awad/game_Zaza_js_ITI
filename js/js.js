@@ -48,21 +48,34 @@ let keyReleased = function (event) {
 };
 document.addEventListener("keydown", keyPress);
 document.addEventListener("keyup", keyReleased);
+
+//Playing intervals
+let timeInterval  = null ;
+let rockInterval = null;
+let controlInterval = null ;
+let fireInterval = null;
+let liveInterval =null ;
 // start rock
 let classImg = document.createElement("img");
-
 let rocksArray = [];
-const windowWidth = container.offsetWidth
+const windowWidth = container.offsetWidth;
+//SuperPower
+let superPower = null;
+//score
+let scores = {
+    // playerOnehighScore:null,
+    // playerOnehighestSurvivalTime :null,
+    // playerOnehighestRockDestroyed:null,
+    // playerTwohighScore:null,
+    // playerTwohighestSurvivalTime :null,
+    // playerTwohighestRockDestroyed:null,
+};
 
 class Rock
 {
     constructor(src)
     {
-        this.fallingPosition = Math.floor(Math.random() * windowWidth);
-        while(this.fallingPosition<=150 || this.fallingPosition>=windowWidth-150)
-        {
-            this.fallingPosition = Math.floor(Math.random() * windowWidth);
-        }
+        this.fallingPosition = Math.floor(Math.random() * (windowWidth-250))+100;
         this.rock = classImg.cloneNode(true);
         this.rock.src = src;
         this.rock.setAttribute("style",`position:absolute;top:-100px;width:100px;height:100px;margin:15px;
@@ -73,11 +86,13 @@ class Rock
     }
     moveDown()
     {
-        if (this.rock.offsetTop + this.rock.offsetHeight > window.innerHeight - 20)
+        if (this.rock.offsetTop + this.rock.offsetHeight > window.innerHeight - 40)
         {
             clearInterval(this.interval);
             container.removeChild(this.rock);
             rocksArray.splice(0, 1);
+            currentCoin --;
+            lifeDiv.innerText=`Live :${currentCoin}`;
             delete(this.rock);
             delete(this.interval);
         }
@@ -101,7 +116,7 @@ class Rock
             }
         }
     }
-};
+}
 
 // end rock
 
@@ -110,11 +125,7 @@ class Rock
 let coinArray= [];
 class Coin {
     constructor(src) {
-        this.fallingPosition = Math.floor(Math.random() * windowWidth);
-        while(this.fallingPosition<=150 || this.fallingPosition>=windowWidth-150)
-        {
-            this.fallingPosition = Math.floor(Math.random() * windowWidth);
-        }
+        this.fallingPosition = Math.floor(Math.random() * (windowWidth-250))+100;
         this.coin = classImg.cloneNode(true);
         this.coin.src = src;
         this.coin.setAttribute("style",`position:absolute;top:-100px;width:75px;height:75px;margin:20px;left:
@@ -178,13 +189,33 @@ class Ship {
 // start fire ball
 
 class FireBall {
-    constructor(src) {
+    constructor(src,mode) {
         this.fireBall = classImg.cloneNode(true);
         this.fireBall.src = src;
-        this.fireBall.setAttribute("style",`top:${ship.spaceShip.offsetTop - 15}px;left:
-       ${ship.spaceShip.offsetLeft +(ship.spaceShip.offsetWidth - 25) / 2}px;position:absolute`);
+        this.fireBall.style.position = "absolute";
+        if (mode === "default")
+        {
+            this.fireBall.style.top = `${ship.spaceShip.offsetTop - 15}px`;
+            this.fireBall.style.left = `${ship.spaceShip.offsetLeft +
+            (ship.spaceShip.offsetWidth - 28) / 2}px`;
+
+
+        }
+        else if (mode ==="right")
+        {
+            this.fireBall.style.top = `${ship.spaceShip.offsetTop +39 }px`;
+            this.fireBall.style.left = `${ship.spaceShip.offsetLeft +
+            (ship.spaceShip.offsetWidth -28) / 2 - 41}px`;
+
+        }
+        else
+        {
+            this.fireBall.style.top = `${ship.spaceShip.offsetTop +39 }px`;
+            this.fireBall.style.left = `${ship.spaceShip.offsetLeft +
+            (ship.spaceShip.offsetWidth -28) / 2 + 41}px`;
+        }
         container.appendChild(this.fireBall);
-        this.interval= setInterval(()=>{this.moveUp()}, 40);
+        this.interval= setInterval(()=>{this.moveUp()}, 20);
     }
 
     moveUp()
@@ -273,7 +304,8 @@ class FireBall {
                         // increase coin
                         currentCoin++;
                         localStorage.setItem('coin', currentCoin);
-                        lifeDiv.innerHTML = `<h3>Life : ${currentCoin} </h3>`;
+                        lifeDiv.innerText=`Live :${currentCoin}`;
+                        superPower = true;
 
                         break;
                     }
@@ -331,23 +363,50 @@ let timer = function()
     }
     document.getElementById("timeValue").innerText=`${min2}${min1}:${sec2}${sec1}`
 };
+
+let gameOver = function() {
+    clearInterval(rockInterval);
+    clearInterval(controlInterval);
+    clearInterval(liveInterval);
+    clearInterval(fireInterval);
+    clearInterval(timeInterval);
+    // adding the div and onclick function to play or main menu
+    };
+
+
 function play()
 {
 
     // creating a space ship
     ship = new Ship('./img/spaceShip.png');
     let fire = null;
+    let rightFire=null;
+    let leftFire = null;
     sec1 = 0;
     sec2 = 0;
     min1 = 0;
     min2 = 0;
-    setInterval(() => {new Rock("./img/rock1.gif");}, 1000);
-    setInterval(() => {new Coin("./img/live.gif");}, 10000);
-    setInterval(() => {
-        if (keyPressed["ControlLeft"]) fire = new FireBall('./img/fire.gif');
-    }, 150);
-    setInterval(controlSpaceShip,50);
-    setInterval(timer,1000);
+    rockInterval = setInterval(() => {new Rock("./img/rock1.gif");}, 1000);
+    liveInterval = setInterval(() => {new Coin("./img/live.gif");}, 10000);
+    fireInterval = setInterval(() => {
+        if (keyPressed["ControlLeft"]) fire = new FireBall('./img/fire.gif',"default");
+        if (superPower){
+         fire = new FireBall('./img/fire.gif',"default");
+         rightFire = new FireBall('./img/fire.gif',"right")  ;
+         leftFire = new FireBall('./img/fire.gif',"left")  ;
+         setTimeout(()=>{superPower=null},2000);
+        }
+
+            }, 150);
+    controlInterval = setInterval(()=> {
+        controlSpaceShip();
+        if(currentCoin<=0){
+            gameOver();
+        }
+    },50);
+    timeInterval = setInterval(timer,1000);
+
+
 }
 
 play();
