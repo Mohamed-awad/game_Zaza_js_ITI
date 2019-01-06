@@ -71,6 +71,23 @@ let scores = {
     // playerTwohighestRockDestroyed:null,
 };
 
+//this var for array that contain the object of imgs for collision between space ship and rock
+let spaceCrashArray = [];
+//this class for creat img and style for it after collision
+class imgcollisionSpace_Rocks {
+    constructor() {
+        this.spaceCrashImg = document.createElement("img");
+        this.spaceCrashImg.src = "./img/111.jpg";
+        this.spaceCrashImg.setAttribute("style",`position:absolute;
+                                        top:${ship.spaceShip.offsetTop + 20}px;
+                                        width:100px; height:100px;
+                                        left:${ship.spaceShip.offsetLeft - 50 + ship.spaceShip.offsetWidth / 2}px`);
+        container.appendChild(this.spaceCrashImg);
+        spaceCrashArray.push(this.spaceCrashImg);
+    }
+}
+
+
 class Rock
 {
     constructor(src)
@@ -98,21 +115,30 @@ class Rock
         }
         else
         {
+
             this.rock.style.top = `${this.rock.offsetTop + 10}px`;
             // collision with ship
             if (
-                this.rock.offsetLeft >= ship.spaceShip.offsetLeft &&
+                this.rock.offsetLeft + this.rock.offsetWidth >= ship.spaceShip.offsetLeft &&
                 this.rock.offsetLeft <= ship.spaceShip.offsetLeft+ ship.spaceShip.offsetWidth &&
-                this.rock.offsetTop >= ship.spaceShip.offsetTop &&
+                this.rock.offsetTop + this.rock.offsetHeight >= ship.spaceShip.offsetTop &&
                 this.rock.offsetTop <= ship.spaceShip.offsetTop+ ship.spaceShip.offsetHeight
             )
             {
+                imgcollisionSpace_Rocks.spaceCrashVolcano = new imgcollisionSpace_Rocks;
                 // deleting rock
                 clearInterval(this.interval);
                 container.removeChild(this.rock);
                 rocksArray.splice(0, 1);
                 delete(this.rock);
                 delete(this.interval);
+                setTimeout(()=>{
+                for (let j = 0; j < spaceCrashArray.length; j++) {
+                    imgcollisionSpace_Rocks.currentVolcano = spaceCrashArray[j];
+                    imgcollisionSpace_Rocks.currentVolcano.remove();
+                    spaceCrashArray.splice(j, 1);
+                    }
+                },3000);
             }
         }
     }
