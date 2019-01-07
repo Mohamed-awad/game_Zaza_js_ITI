@@ -24,6 +24,8 @@ let currentCoin = localStorage.getItem('coin');
 if(currentCoin === null)
     currentCoin = 10;
 
+let highestCoin = null;
+
 // set level and life and score to dom
 lifeDiv.innerText=`Live : ${currentCoin}`;
 scoreDiv.innerText=`Score : ${currentScore}`;
@@ -34,6 +36,7 @@ let sec1 = null;
 let sec2 = null;
 let min1 = null;
 let min2 = null;
+let totalSeconds = null;
 // ship
 let ship = null;
 //Controlling
@@ -61,16 +64,22 @@ let rocksArray = [];
 const windowWidth = container.offsetWidth;
 //SuperPower
 let superPower = null;
-//score
-let scores = {
-    // playerOnehighScore:null,
-    // playerOnehighestSurvivalTime :null,
-    // playerOnehighestRockDestroyed:null,
-    // playerTwohighScore:null,
-    // playerTwohighestSurvivalTime :null,
-    // playerTwohighestRockDestroyed:null,
-};
+//player class
+class Player
+{
+    constructor(name){
+        this.name = name;
+        this.highScore = null;
+        this.survivalTime = null;
+        this.lives = null;
+        this.playerShip = null;
+    }
+}
 
+//players information
+let playerOne = new Player("motaz");
+let playerTwo = new Player("samman");
+let playersArr = [playerOne,playerTwo];
 //this var for array that contain the object of imgs for collision between space ship and rock
 let spaceCrashArray = [];
 //this class for creat img and style for it after collision
@@ -108,8 +117,9 @@ class Rock
             clearInterval(this.interval);
             container.removeChild(this.rock);
             rocksArray.splice(0, 1);
-            currentCoin --;
-            lifeDiv.innerText=`Live :${currentCoin}`;
+            if (currentCoin!==0){
+            currentCoin --;}
+            lifeDiv.innerText=`Live : ${currentCoin}`;
             delete(this.rock);
             delete(this.interval);
         }
@@ -192,11 +202,11 @@ class Coin {
                 // increase coin
                 currentCoin++;
                 localStorage.setItem('coin', currentCoin);
-                lifeDiv.innerText=`Live :${currentCoin}`;
+                lifeDiv.innerText=`Live : ${currentCoin}`;
             }
         }
     }
-};
+}
 // end coin
 
 // start ship
@@ -296,7 +306,7 @@ class FireBall {
                     {
                         currentLevel = 1;
                     }
-                    localStorage.setItem('score', currentLevel);
+                    localStorage.setItem('level', currentLevel);
                     levelDiv.innerText=`Level : ${currentLevel}`;
 
                     // change flag because fire not exist any more
@@ -330,7 +340,7 @@ class FireBall {
                         // increase coin
                         currentCoin++;
                         localStorage.setItem('coin', currentCoin);
-                        lifeDiv.innerText=`Live :${currentCoin}`;
+                        lifeDiv.innerText=`Live : ${currentCoin}`;
                         superPower = true;
 
                         break;
@@ -387,24 +397,36 @@ let timer = function()
         min1 = 0;
         min2+=1
     }
+    totalSeconds++;
     document.getElementById("timeValue").innerText=`${min2}${min1}:${sec2}${sec1}`
 };
 
-let gameOver = function() {
+let gameOver = function(player) {
     clearInterval(rockInterval);
     clearInterval(controlInterval);
     clearInterval(liveInterval);
     clearInterval(fireInterval);
     clearInterval(timeInterval);
-    // adding the div and onclick function to play or main menu
+    //Checking high score
+    if (currentScore>player.highScore){
+        player.highScore = currentScore;
+        console.log("new High Score")
+    }
+    if (highestCoin>player.lives){
+        player.lives = highestCoin;
+    }
+    if (totalSeconds>player.survivalTime){
+        player.survivalTime=totalSeconds;
+    }
+
+    // adding the div and onclick function to play or main menu and summary
     };
 
 
-function play()
+function play(player)
 {
-
     // creating a space ship
-    ship = new Ship('./img/spaceShip.png');
+    ship = new Ship('./img/spaceShip.png'); //playerSpaceshipSrc
     let fire = null;
     let rightFire=null;
     let leftFire = null;
@@ -412,6 +434,7 @@ function play()
     sec2 = 0;
     min1 = 0;
     min2 = 0;
+    totalSeconds = 0;
     rockInterval = setInterval(() => {new Rock("./img/rock1.gif");}, 1000);
     liveInterval = setInterval(() => {new Coin("./img/live.gif");}, 10000);
     fireInterval = setInterval(() => {
@@ -427,7 +450,7 @@ function play()
     controlInterval = setInterval(()=> {
         controlSpaceShip();
         if(currentCoin<=0){
-            gameOver();
+            gameOver(playerOne);
         }
     },50);
     timeInterval = setInterval(timer,1000);
