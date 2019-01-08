@@ -1,82 +1,92 @@
-     <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 
-        <title>Zaza</title>
-    </head>
-    <body >
-    
-        <div class="container-fluid"> 
-        
-            <div class="row" >
-                       <div class="col-sm-12 colo" >
-                           <img src="img/logo.png" alt="">
-                       </div>
+    <title>Zaza</title>
+</head>
+<body>
 
-            </div>
-            
+<div id = "container" style="display: none;" class="container-fluid game">
+    <div class="statusBar">
+        <div id="score" class="tab">
+            <h3 id = "scoreValue" class="value">Score: 0</h3>
+        </div>
+        <div id="live">
+            <h3 id = "liveValue" class="value">Live: 10</h3>
+        </div>
+        <div id="time">
+            <h3 id = "timeValue" class="value">00:00</h3>
+        </div>
+        <div id="level">
+            <h3 id = "levelValue" class="value">Level: 1</h3>
+        </div>
+    </div>
+</div>
 
-            <div class="row">
-                <div  class="col-md-12 playnow" >
-                    <button id="playbtn" type="button" class="btn btn-warning">play now </button>
-                </div>
-            </div>
-            <div class="row">
-                    <div  class="col-md-12 exit">
-                            <button id="clos" onclick="closeWin();" type="button" class="btn btn-warning">Exit</button>
-                        </div>
-            </div>
+<div id = "index" class="container-fluid">
 
-
-        <!--select character-->
-
-        <div class="row">
-
-                <div id="firchar" class="col-md-3 active firstcharacter"   >
-                    <img src="img/spaceShip1.png">
-                </div>
-                <div id="secchar" class="col-md-3 secondcharacter" >
-                    <img src="img/spaceShip2.png">
-                </div>
-                <div id="thirchar" class="col-md-3 thirdcharacter" >
-                    <img src="img/spaceShip3.png">
-                </div>
-
+    <div class="row">
+        <div class="col-sm-12 colo">
+            <img src="img/logo.png" alt="">
         </div>
 
-        
-            <audio id="lowsound" autoplay loop >
-                    <source src="audio/Game_play2.ogg" type="audio/ogg">
-                    <source src="audio/Game_play2.ogg" type="audio/mpeg">
-                    
-                  </audio>
+    </div>
 
 
-
-                  <audio id="playsound">
-                        <source src="audio/weaponfire5.wav"></source>
-                        <source src="audio/weaponfire5.wav"></source>
-                    </audio>
-
-
-                    <audio id="plyspell">
-                            <source src="audio/spell.ogg"></source>
-                            <source src="audio/spell.ogg"></source>
-                        </audio>
-
+    <div class="row">
+        <div class="col-md-12 playnow">
+            <button id="playbtn" type="button" class="btn btn-warning">play now</button>
         </div>
-    
-        <!--js files-->
+    </div>
+    <div class="row">
+        <div class="col-md-12 exit">
+            <button id="clos" onclick="closeWin();" type="button" class="btn btn-warning">Exit</button>
+        </div>
+    </div>
 
-        
-        <script src="js/js.js"></script>
-        <script src="js/main.js"></script>
-        
-        
-    </body>
-    </html>
+
+    <!--select character-->
+
+    <div class="row">
+
+        <div id="firchar" class="col-md-3 active firstcharacter">
+            <img src="img/spaceShip.png">
+        </div>
+        <div id="secchar" class="col-md-3 secondcharacter">
+            <img src="img/spaceShip2.png">
+        </div>
+        <div id="thirchar" class="col-md-3 thirdcharacter">
+            <img src="img/spaceShip3.png">
+        </div>
+
+    </div>
+    <audio id="lowsound" autoplay loop>
+        <source src="audio/Game_play2.ogg" type="audio/ogg">
+        <source src="audio/Game_play2.ogg" type="audio/mpeg">
+
+    </audio>
+
+    <audio id="playsound">
+        <source src="audio/weaponfire5.wav">
+        <source src="audio/weaponfire5.wav">
+    </audio>
+
+
+    <audio id="plyspell">
+        <source src="audio/spell.ogg">
+        <source src="audio/spell.ogg">
+    </audio>
+
+</div>
+`
+
+
+<!--js files-->
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+///////////////////
 // get container
 let container = document.getElementById("container");
 
@@ -61,25 +62,22 @@ let liveInterval =null ;
 // start rock
 let classImg = document.createElement("img");
 let rocksArray = [];
-const windowWidth = container.offsetWidth;
 //SuperPower
 let superPower = null;
 //player class
 class Player
 {
-    constructor(name){
+    constructor(src){
         this.name = name;
         this.highScore = null;
         this.survivalTime = null;
         this.lives = null;
-        this.playerShip = null;
+        this.src=src;
+
     }
 }
 
-//players information
-let playerOne = new Player("motaz");
-let playerTwo = new Player("samman");
-let playersArr = [playerOne,playerTwo];
+
 //this var for array that contain the object of imgs for collision between space ship and rock
 let spaceCrashArray = [];
 //this class for creat img and style for it after collision
@@ -96,12 +94,11 @@ class imgcollisionSpace_Rocks {
     }
 }
 
-
 class Rock
 {
     constructor(src)
     {
-        this.fallingPosition = Math.floor(Math.random() * (windowWidth-250))+100;
+        this.fallingPosition = Math.floor(Math.random() * (window.innerWidth -250))+100;
         this.rock = classImg.cloneNode(true);
         this.rock.src = src;
         this.rock.setAttribute("style",`position:absolute;top:-100px;width:100px;height:100px;margin:15px;
@@ -118,7 +115,7 @@ class Rock
             container.removeChild(this.rock);
             rocksArray.splice(0, 1);
             if (currentCoin!==0){
-            currentCoin --;}
+                currentCoin --;}
             lifeDiv.innerText=`Live : ${currentCoin}`;
             delete(this.rock);
             delete(this.interval);
@@ -143,12 +140,12 @@ class Rock
                 delete(this.rock);
                 delete(this.interval);
                 setTimeout(()=>{
-                for (let j = 0; j < spaceCrashArray.length; j++) {
-                    imgcollisionSpace_Rocks.currentVolcano = spaceCrashArray[j];
-                    imgcollisionSpace_Rocks.currentVolcano.remove();
-                    spaceCrashArray.splice(j, 1);
+                    for (let j = 0; j < spaceCrashArray.length; j++) {
+                        imgcollisionSpace_Rocks.currentVolcano = spaceCrashArray[j];
+                        imgcollisionSpace_Rocks.currentVolcano.remove();
+                        spaceCrashArray.splice(j, 1);
                     }
-                },300);
+                },3000);
             }
         }
     }
@@ -161,7 +158,7 @@ class Rock
 let coinArray= [];
 class Coin {
     constructor(src) {
-        this.fallingPosition = Math.floor(Math.random() * (windowWidth-250))+100;
+        this.fallingPosition = Math.floor(Math.random() * (window.innerWidth -250))+100;
         this.coin = classImg.cloneNode(true);
         this.coin.src = src;
         this.coin.setAttribute("style",`position:absolute;top:-100px;width:75px;height:75px;margin:20px;left:
@@ -173,7 +170,7 @@ class Coin {
 
     moveDown()
     {
-        if (this.coin.offsetTop + this.coin.offsetHeight > window.innerHeight - 20)
+        if (this.coin.offsetTop + this.coin.offsetHeight > window.innerHeight - 40)
         {
             clearInterval(this.interval);
             container.removeChild(this.coin);
@@ -215,7 +212,7 @@ class Ship {
     constructor(src) {
         this.spaceShip = classImg.cloneNode(true);
         this.spaceShip.src = src;
-        this.spaceShip.setAttribute("style",`position:absolute;top:${window.innerHeight - 140}px;left:${(windowWidth - 125) / 2}px;
+        this.spaceShip.setAttribute("style",`position:absolute;top:${window.innerHeight - 140}px;left:${(window.innerWidth - 125) / 2}px;
                                                width:125px;height:140px`);
         container.appendChild(this.spaceShip);
     }
@@ -301,7 +298,6 @@ class FireBall {
                     else if (currentScore >= 200)
                     {
                         currentLevel = 2;
-                        
                     }
                     else
                     {
@@ -360,7 +356,7 @@ let controlSpaceShip = function () {
     //               The ArrowRight key is assigned automatically using the event.code as it's explained
     //               in the event listeners functions
     if (keyPressed["ArrowRight"]) {
-        if (ship.spaceShip.offsetLeft < 1400) {
+        if (ship.spaceShip.offsetLeft < (window.innerWidth-ship.spaceShip.offsetWidth-20)) {
             ship.spaceShip.style.left = `${ship.spaceShip.offsetLeft += 20}px`;
         }
     }
@@ -370,7 +366,7 @@ let controlSpaceShip = function () {
         }
     }
     if (keyPressed["ArrowDown"]) {
-        if (ship.spaceShip.offsetTop < 570) {
+        if (ship.spaceShip.offsetTop < (window.innerHeight-ship.spaceShip.offsetHeight)) {
             ship.spaceShip.style.top = `${ship.spaceShip.offsetTop += 20}px`;
         }
     }
@@ -421,14 +417,15 @@ let gameOver = function(player) {
     }
 
     // adding the div and onclick function to play or main menu and summary
-    };
+};
 
 
 function play(player)
 {
+    container.style.display="block";
+    document.getElementById("index").style.display="none";
     // creating a space ship
-   let url_page = document.location.href;
-    ship = new Ship('./img/spaceShip'+url_page[url_page.length-1]+'.png'); //playerSpaceshipSrc
+    ship = new Ship(player.src); //playerSpaceshipSrc
     let fire = null;
     let rightFire=null;
     let leftFire = null;
@@ -437,18 +434,18 @@ function play(player)
     min1 = 0;
     min2 = 0;
     totalSeconds = 0;
-    rockInterval = setInterval(() => {new Rock("./img/rock1.gif");}, 1500);
+    rockInterval = setInterval(() => {new Rock("./img/rock1.gif");}, 1000);
     liveInterval = setInterval(() => {new Coin("./img/live.gif");}, 10000);
     fireInterval = setInterval(() => {
         if (keyPressed["ControlLeft"]) fire = new FireBall('./img/fire.gif',"default");
         if (superPower){
-         fire = new FireBall('./img/fire.gif',"default");
-         rightFire = new FireBall('./img/fire.gif',"right")  ;
-         leftFire = new FireBall('./img/fire.gif',"left")  ;
-         setTimeout(()=>{superPower=null},2000);
+            fire = new FireBall('./img/fire.gif',"default");
+            rightFire = new FireBall('./img/fire.gif',"right")  ;
+            leftFire = new FireBall('./img/fire.gif',"left")  ;
+            setTimeout(()=>{superPower=null},2000);
         }
 
-            }, 150);
+    }, 150);
     controlInterval = setInterval(()=> {
         controlSpaceShip();
         if(currentCoin<=0){
@@ -460,4 +457,90 @@ function play(player)
 
 }
 
-play();
+
+///========================Main Menu=================================//
+//players information
+let playerOne = new Player("./img/spaceShip1.png");
+let playerTwo = new Player("./img/spaceShip2.png");
+let playerThree = new Player("./img/spaceShip3.png");
+let currentPlayer = playerOne;
+let playersArr = [playerOne,playerTwo,playerThree];
+
+let playaudio = function()
+{
+    let audio = document.getElementById("playsound");
+    audio.play();
+};
+
+let bb = document.getElementById("playbtn");
+
+bb.addEventListener("mouseover" , playaudio);
+
+let lowsounds = document.getElementById("lowsound");
+lowsounds.volume = .1;
+
+let divaudio = function()
+{
+    let divadui = document.getElementById("plyspell");
+    divadui.play();
+};
+
+let fircharacter = document.getElementById("firchar");
+let secondcharacter = document.getElementById("secchar");
+let thirdcharacter = document.getElementById("thirchar");
+
+fircharacter.addEventListener("mouseover" , divaudio);
+secondcharacter.addEventListener("mouseover" , divaudio);
+thirdcharacter.addEventListener("mouseover" , divaudio);
+
+
+function closeWin() {
+    if(confirm("are you sure?")){
+        close();
+    }
+}
+
+let s1=document.getElementById("firchar");
+let s2=document.getElementById("secchar");
+let s3=document.getElementById("thirchar");
+function select(ch)
+{
+    switch(ch)
+    {
+        case 1:
+            s1.classList.add('selected');
+            s2.classList.remove('selected');
+            s3.classList.remove('selected');
+            currentPlayer = playerOne;
+            break;
+        case 2:
+            s1.classList.remove('selected');
+            s2.classList.add('selected');
+            s3.classList.remove('selected');
+            currentPlayer = playerTwo;
+            break;
+        case 3:
+            s1.classList.remove('selected');
+            s2.classList.remove('selected');
+            s3.classList.add('selected');
+            currentPlayer = playerThree;
+            break;
+    }
+}
+let redir = document.getElementById("playbtn");
+
+let redi = function()
+{
+    play(currentPlayer);
+};
+redir.addEventListener("click" , redi);
+
+s1.addEventListener('click', ()=>{select(1)});
+s2.addEventListener('click', ()=>{select(2)});
+s3.addEventListener('click', ()=>{select(3)});
+
+
+
+
+
+
