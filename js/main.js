@@ -134,6 +134,7 @@ class Rock
             {
                 imgcollisionSpace_Rocks.spaceCrashVolcano = new imgcollisionSpace_Rocks;
                 // deleting rock
+                play_collision_rock();
                 clearInterval(this.interval);
                 container.removeChild(this.rock);
                 rocksArray.splice(0, 1);
@@ -189,6 +190,7 @@ class Coin {
                 this.coin.offsetTop <= ship.spaceShip.offsetTop+ ship.spaceShip.offsetHeight
             )
             {
+                divaudio();
                 // deleting coin
                 clearInterval(this.interval);
                 container.removeChild(this.coin);
@@ -249,6 +251,7 @@ class FireBall {
         }
         container.appendChild(this.fireBall);
         this.interval= setInterval(()=>{this.moveUp()}, 20);
+        playaudio();
     }
 
     moveUp()
@@ -275,6 +278,7 @@ class FireBall {
                     (rocksArray[i].rock.offsetTop + rocksArray[i].rock.offsetHeight) - this.fireBall.offsetTop <70
                 )
                 {
+                    play_collision_rock();
                     // deleting fire ball
                     clearInterval(this.interval);
                     container.removeChild(this.fireBall);
@@ -324,6 +328,7 @@ class FireBall {
                         (coinArray[i].coin.offsetTop + coinArray[i].coin.offsetHeight) - this.fireBall.offsetTop <70
                     )
                     {
+                        divaudio();
                         // deleting fire ball
                         clearInterval(this.interval);
                         container.removeChild(this.fireBall);
@@ -422,6 +427,7 @@ let gameOver = function(player) {
 
 function play(player)
 {
+    document.body.style.backgroundImage = "url('./img/giphy.gif')"; 
     container.style.display="block";
     document.getElementById("index").style.display="none";
     // creating a space ship
@@ -435,10 +441,15 @@ function play(player)
     min2 = 0;
     totalSeconds = 0;
     rockInterval = setInterval(() => {new Rock("./img/rock1.gif");}, 1000);
-    liveInterval = setInterval(() => {new Coin("./img/live.gif");}, 10000);
+    liveInterval = setInterval(() => {new Coin("./img/live.gif");}, 5000);
     fireInterval = setInterval(() => {
-        if (keyPressed["ControlLeft"]) fire = new FireBall('./img/fire.gif',"default");
+        if (keyPressed["ControlLeft"]) 
+        {
+            fire = new FireBall('./img/fire.gif',"default");
+            playaudio();
+        }
         if (superPower){
+            playaudio();
             fire = new FireBall('./img/fire.gif',"default");
             rightFire = new FireBall('./img/fire.gif',"right")  ;
             leftFire = new FireBall('./img/fire.gif',"left")  ;
@@ -469,8 +480,16 @@ let playersArr = [playerOne,playerTwo,playerThree];
 let playaudio = function()
 {
     let audio = document.getElementById("playsound");
+    audio.currentTime = 0;
     audio.play();
 };
+
+let play_collision_rock = function()
+{
+    let audio = document.getElementById("explosion");
+    audio.play();
+};
+
 
 let bb = document.getElementById("playbtn");
 
