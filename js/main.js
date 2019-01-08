@@ -14,18 +14,11 @@ let levelDiv = document.getElementById("levelValue");
 //get time dive
 let timelDiv = document.getElementById("timeValue");
 
-// local storage for coins and score and level
-let currentLevel = localStorage.getItem('level');
-if(currentLevel === null)
-    currentLevel = 1;
-let currentScore = localStorage.getItem('score');
-if(currentScore === null)
-    currentScore = 0;
-let currentCoin = localStorage.getItem('coin');
-if(currentCoin === null)
-    currentCoin = 10;
-
-let highestCoin = null;
+// coins and score and level
+let currentLevel = 1;
+let currentScore = 0;
+let currentCoin = 10;
+let highestCoin = 0;
 
 // set level and life and score to dom
 lifeDiv.innerText=`Live : ${currentCoin}`;
@@ -64,11 +57,13 @@ let classImg = document.createElement("img");
 let rocksArray = [];
 //SuperPower
 let superPower = null;
+let finishSuperPowerFlag=null;
+
 //player class
 class Player
 {
     constructor(src){
-        this.name = name;
+        //this.name = name;
         this.highScore = null;
         this.survivalTime = null;
         this.lives = null;
@@ -76,8 +71,11 @@ class Player
 
     }
 }
-
-
+let playerOne = new Player("./img/spaceShip1.png");
+let playerTwo = new Player("./img/spaceShip2.png");
+let playerThree = new Player("./img/spaceShip3.png");
+let playersArr=[playerOne,playerTwo,playerThree];
+let currentPlayer = playerOne;
 //this var for array that contain the object of imgs for collision between space ship and rock
 let spaceCrashArray = [];
 //this class for creat img and style for it after collision
@@ -139,13 +137,16 @@ class Rock
                 rocksArray.splice(0, 1);
                 delete(this.rock);
                 delete(this.interval);
+                if (currentCoin!==0){
+                    currentCoin --;}
+                lifeDiv.innerText=`Live : ${currentCoin}`;
                 setTimeout(()=>{
                     for (let j = 0; j < spaceCrashArray.length; j++) {
                         imgcollisionSpace_Rocks.currentVolcano = spaceCrashArray[j];
                         imgcollisionSpace_Rocks.currentVolcano.remove();
                         spaceCrashArray.splice(j, 1);
                     }
-                },3000);
+                },1000);
             }
         }
     }
@@ -198,7 +199,8 @@ class Coin {
 
                 // increase coin
                 currentCoin++;
-                localStorage.setItem('coin', currentCoin);
+                highestCoin++;
+                superPower = true;
                 lifeDiv.innerText=`Live : ${currentCoin}`;
             }
         }
@@ -248,10 +250,10 @@ class FireBall {
             (ship.spaceShip.offsetWidth -28) / 2 + 41}px`;
         }
         container.appendChild(this.fireBall);
-        this.interval= setInterval(()=>{this.moveUp()}, 20);
+        this.interval= setInterval(()=>{this.moveUp(mode)}, 20);
     }
 
-    moveUp()
+    moveUp(mode)
     {
         // remove when arrive to the top
         if(this.fireBall.offsetTop < 50)
@@ -263,7 +265,19 @@ class FireBall {
         }
         else
         {
-            this.fireBall.style.top = `${this.fireBall.offsetTop - 10}px`;
+            //super power conditions
+            if (mode==="default") {
+                this.fireBall.style.top = `${this.fireBall.offsetTop - 10}px`;
+            }
+            else if (mode === "right")
+            {
+                this.fireBall.style.top = `${this.fireBall.offsetTop - 10}px`;
+                this.fireBall.style.left= `${this.fireBall.offsetLeft - 5}px`;
+            }
+            else {
+                this.fireBall.style.top = `${this.fireBall.offsetTop - 10}px`;
+                this.fireBall.style.left= `${this.fireBall.offsetLeft + 5}px`;
+            }
             // collision for rocks
             let flag = 1;
             for(let i = 0; i < rocksArray.length; i++)
@@ -287,7 +301,6 @@ class FireBall {
 
                     // increase score
                     currentScore++;
-                    localStorage.setItem('score', currentScore);
                     scoreDiv.innerText=`Score : ${currentScore}`;
 
                     // increase level
@@ -303,7 +316,6 @@ class FireBall {
                     {
                         currentLevel = 1;
                     }
-                    localStorage.setItem('level', currentLevel);
                     levelDiv.innerText=`Level : ${currentLevel}`;
 
                     // change flag because fire not exist any more
@@ -336,10 +348,9 @@ class FireBall {
 
                         // increase coin
                         currentCoin++;
-                        localStorage.setItem('coin', currentCoin);
-                        lifeDiv.innerText=`Live : ${currentCoin}`;
+                        highestCoin++;
                         superPower = true;
-
+                        lifeDiv.innerText=`Live : ${currentCoin}`;
                         break;
                     }
                 }
@@ -356,7 +367,7 @@ let controlSpaceShip = function () {
     //               The ArrowRight key is assigned automatically using the event.code as it's explained
     //               in the event listeners functions
     if (keyPressed["ArrowRight"]) {
-        if (ship.spaceShip.offsetLeft < (window.innerWidth-ship.spaceShip.offsetWidth-20)) {
+        if (ship.spaceShip.offsetLeft < (window.innerWidth-ship.spaceShip.offsetWidth-30)) {
             ship.spaceShip.style.left = `${ship.spaceShip.offsetLeft += 20}px`;
         }
     }
@@ -366,7 +377,7 @@ let controlSpaceShip = function () {
         }
     }
     if (keyPressed["ArrowDown"]) {
-        if (ship.spaceShip.offsetTop < (window.innerHeight-ship.spaceShip.offsetHeight)) {
+        if (ship.spaceShip.offsetTop < (window.innerHeight-ship.spaceShip.offsetHeight-30)) {
             ship.spaceShip.style.top = `${ship.spaceShip.offsetTop += 20}px`;
         }
     }
@@ -416,12 +427,23 @@ let gameOver = function(player) {
         player.survivalTime=totalSeconds;
     }
 
+    //local storage
+    localStorage.setItem("playersData",JSON.stringify(playersArr));
     // adding the div and onclick function to play or main menu and summary
+
+
 };
+let playersLS = JSON.parse(localStorage.getItem('playersData'));
 
-
+if (playersLS[0].survivalTime!=null||playersLS[1].survivalTime!=null||playersLS[2].survivalTime!=null){
+}
+playersArr=playersLS;
+playerOne = playersArr[0];
+playerTwo=playersArr[1];
+playerThree=playersArr[2];
 function play(player)
 {
+    finishSuperPowerFlag=true;
     container.style.display="block";
     document.getElementById("index").style.display="none";
     // creating a space ship
@@ -429,6 +451,10 @@ function play(player)
     let fire = null;
     let rightFire=null;
     let leftFire = null;
+    currentLevel = 1;
+    currentScore = 0;
+    currentCoin = 10;
+    highestCoin = 0;
     sec1 = 0;
     sec2 = 0;
     min1 = 0;
@@ -438,18 +464,24 @@ function play(player)
     liveInterval = setInterval(() => {new Coin("./img/live.gif");}, 10000);
     fireInterval = setInterval(() => {
         if (keyPressed["ControlLeft"]) fire = new FireBall('./img/fire.gif',"default");
-        if (superPower){
+        if (superPower&&keyPressed["ControlLeft"]){
             fire = new FireBall('./img/fire.gif',"default");
             rightFire = new FireBall('./img/fire.gif',"right")  ;
             leftFire = new FireBall('./img/fire.gif',"left")  ;
-            setTimeout(()=>{superPower=null},2000);
+            if(finishSuperPowerFlag) {
+                finishSuperPowerFlag = true;
+            }
+        }
+        if (superPower&&finishSuperPowerFlag){ //to justify when the power interval end
+            finishSuperPowerFlag=false;
+            setTimeout(()=>{superPower=false;finishSuperPowerFlag=true;},5000);
         }
 
     }, 150);
     controlInterval = setInterval(()=> {
         controlSpaceShip();
         if(currentCoin<=0){
-            gameOver(playerOne);
+            gameOver(currentPlayer);
         }
     },50);
     timeInterval = setInterval(timer,1000);
@@ -460,12 +492,6 @@ function play(player)
 
 ///========================Main Menu=================================//
 //players information
-let playerOne = new Player("./img/spaceShip1.png");
-let playerTwo = new Player("./img/spaceShip2.png");
-let playerThree = new Player("./img/spaceShip3.png");
-let currentPlayer = playerOne;
-let playersArr = [playerOne,playerTwo,playerThree];
-
 let playaudio = function()
 {
     let audio = document.getElementById("playsound");
@@ -538,8 +564,6 @@ redir.addEventListener("click" , redi);
 s1.addEventListener('click', ()=>{select(1)});
 s2.addEventListener('click', ()=>{select(2)});
 s3.addEventListener('click', ()=>{select(3)});
-
-
 
 
 
