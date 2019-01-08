@@ -103,7 +103,22 @@ class Rock
                                         left:${this.fallingPosition}px`);
         container.appendChild(this.rock);
         rocksArray.push(this);
-        this.interval= setInterval(()=>{this.moveDown()}, 120);
+        //for level
+        let speedOfRock=0;
+        if(currentLevel === 1)
+        {
+          speedOfRock=120;
+        }
+        else if(currentLevel === 2)
+        {
+          speedOfRock=90;
+        }
+        else if(currentLevel === 3)
+        {
+          speedOfRock=60;
+        }
+        //end for level
+        this.interval= setInterval(()=>{this.moveDown()}, speedOfRock);//here
     }
     moveDown()
     {
@@ -250,7 +265,22 @@ class FireBall {
             (ship.spaceShip.offsetWidth -28) / 2 + 41}px`;
         }
         container.appendChild(this.fireBall);
-        this.interval= setInterval(()=>{this.moveUp(mode)}, 20);
+        //start level here
+        let fireBallSpeed=0;
+        if(currentLevel==1)
+        {
+            fireBallSpeed=20;
+        }
+        else if(currentLevel==2)
+        {
+            fireBallSpeed=15;
+        }
+        else if(currentLevel==3)
+        {
+            fireBallSpeed=10;
+        }
+        //end level here
+        this.interval= setInterval(()=>{this.moveUp(mode)}, fireBallSpeed);
     }
 
     moveUp(mode)
@@ -304,11 +334,11 @@ class FireBall {
                     scoreDiv.innerText=`Score : ${currentScore}`;
 
                     // increase level
-                    if(currentScore >= 500)
+                    if(currentScore >= 200)
                     {
                         currentLevel = 3;
                     }
-                    else if (currentScore >= 200)
+                    else if (currentScore >= 100)
                     {
                         currentLevel = 2;
                     }
@@ -366,24 +396,38 @@ let controlSpaceShip = function () {
     // FOR Example : KeyPressed["ArrowRight"] check for the value of the key "ArrowRight" in the array
     //               The ArrowRight key is assigned automatically using the event.code as it's explained
     //               in the event listeners functions
+    //for level
+    let movePixel=0;
+    if(currentLevel===1)
+    {
+       movePixel=20;
+    }
+    else if(currentLevel===2)
+    {
+       movePixel=30;
+    }
+    else if (currentLevel===3) {
+      movePixel=40;
+    }
+    //end for level
     if (keyPressed["ArrowRight"]) {
-        if (ship.spaceShip.offsetLeft < (window.innerWidth-ship.spaceShip.offsetWidth-30)) {
-            ship.spaceShip.style.left = `${ship.spaceShip.offsetLeft += 20}px`;
+        if (ship.spaceShip.offsetLeft < (window.innerWidth-ship.spaceShip.offsetWidth-movePixel)) {
+            ship.spaceShip.style.left = `${ship.spaceShip.offsetLeft += movePixel}px`;
         }
     }
     if (keyPressed["ArrowLeft"]) {
         if (ship.spaceShip.offsetLeft > 20) {
-            ship.spaceShip.style.left = `${ship.spaceShip.offsetLeft -= 20}px`;
+            ship.spaceShip.style.left = `${ship.spaceShip.offsetLeft -= movePixel}px`;
         }
     }
     if (keyPressed["ArrowDown"]) {
-        if (ship.spaceShip.offsetTop < (window.innerHeight-ship.spaceShip.offsetHeight-30)) {
-            ship.spaceShip.style.top = `${ship.spaceShip.offsetTop += 20}px`;
+        if (ship.spaceShip.offsetTop < (window.innerHeight-ship.spaceShip.offsetHeight)) {
+            ship.spaceShip.style.top = `${ship.spaceShip.offsetTop += movePixel}px`;
         }
     }
     if (keyPressed["ArrowUp"]) {
         if (ship.spaceShip.offsetTop > 10) {
-            ship.spaceShip.style.top = `${ship.spaceShip.offsetTop -= 20}px`;
+            ship.spaceShip.style.top = `${ship.spaceShip.offsetTop -= movePixel}px`;
         }
     }
 };
@@ -460,7 +504,27 @@ function play(player)
     min1 = 0;
     min2 = 0;
     totalSeconds = 0;
-    rockInterval = setInterval(() => {new Rock("./img/rock1.gif");}, 1000);
+
+    //for levels
+    let rockTimeInterval=0;
+    let fireInterval=0;
+    if(currentLevel===1)
+    {
+        rockTimeInterval=1000;
+        fireInterval=150;
+    }
+    else if(currentLevel===2)
+    {
+        rockTimeInterval=600;
+        fireInterval=130;
+    }
+    else if (currentLevel===3)
+    {
+        rockTimeInterval=400;
+        fireInterval=100;
+    }
+    //end of for levels
+    rockInterval = setInterval(() => {new Rock("./img/rock1.gif");}, rockTimeInterval);//here
     liveInterval = setInterval(() => {new Coin("./img/live.gif");}, 10000);
     fireInterval = setInterval(() => {
         if (keyPressed["ControlLeft"]) fire = new FireBall('./img/fire.gif',"default");
@@ -476,8 +540,7 @@ function play(player)
             finishSuperPowerFlag=false;
             setTimeout(()=>{superPower=false;finishSuperPowerFlag=true;},5000);
         }
-
-    }, 150);
+    }, fireInterval);
     controlInterval = setInterval(()=> {
         controlSpaceShip();
         if(currentCoin<=0){
@@ -564,7 +627,3 @@ redir.addEventListener("click" , redi);
 s1.addEventListener('click', ()=>{select(1)});
 s2.addEventListener('click', ()=>{select(2)});
 s3.addEventListener('click', ()=>{select(3)});
-
-
-
-
