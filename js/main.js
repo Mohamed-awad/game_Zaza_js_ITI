@@ -23,7 +23,7 @@ let fireSound = function()
 {
     let audio = document.getElementById("fireSound");
     audio.currentTime = 0;
-    audio.volume = 0.3;
+    audio.volume = 0.1;
     audio.play();
 };
 
