@@ -14,16 +14,14 @@ let levelDiv = document.getElementById("levelValue");
 //get time dive
 let timelDiv = document.getElementById("timeValue");
 
+//
+let gameOverDiv = document.getElementsByClassName("gameOver")[0];
+
 // coins and score and level
 let currentLevel = 1;
 let currentScore = 0;
 let currentCoin = 10;
 let highestCoin = 0;
-
-// set level and life and score to dom
-lifeDiv.innerText=`Live : ${currentCoin}`;
-scoreDiv.innerText=`Score : ${currentScore}`;
-levelDiv.innerText=`Level : ${currentLevel}`;
 
 //Timer
 let sec1 = null;
@@ -41,7 +39,6 @@ let keyPress = function (event) {
 };
 let keyReleased = function (event) {
     keyPressed[event.code] = false; // it returns false when key is released
-    console.log(keyPressed);
 };
 document.addEventListener("keydown", keyPress);
 document.addEventListener("keyup", keyReleased);
@@ -107,15 +104,15 @@ class Rock
         let speedOfRock=0;
         if(currentLevel === 1)
         {
-          speedOfRock=120;
+            speedOfRock=120;
         }
         else if(currentLevel === 2)
         {
-          speedOfRock=90;
+            speedOfRock=90;
         }
         else if(currentLevel === 3)
         {
-          speedOfRock=60;
+            speedOfRock=60;
         }
         //end for level
         this.interval= setInterval(()=>{this.moveDown()}, speedOfRock);//here
@@ -158,11 +155,11 @@ class Rock
                 lifeDiv.innerText=`Live : ${currentCoin}`;
                 setTimeout(()=>{
                     for (let j = 0; j < spaceCrashArray.length; j++) {
-                        imgcollisionSpace_Rocks.currentVolcano = spaceCrashArray[j];
-                        imgcollisionSpace_Rocks.currentVolcano.remove();
-                        spaceCrashArray.splice(j, 1);
-                    }
-                },200);
+                imgcollisionSpace_Rocks.currentVolcano = spaceCrashArray[j];
+                imgcollisionSpace_Rocks.currentVolcano.remove();
+                spaceCrashArray.splice(j, 1);
+            }
+            },200);
             }
         }
     }
@@ -200,11 +197,17 @@ class Coin {
             this.coin.style.top = `${this.coin.offsetTop + 10}px`;
             // collision with ship
             if (
-                this.coin.offsetLeft >= ship.spaceShip.offsetLeft &&
+                // this.coin.offsetLeft >= ship.spaceShip.offsetLeft &&
+                // this.coin.offsetLeft <= ship.spaceShip.offsetLeft+ ship.spaceShip.offsetWidth &&
+                // this.coin.offsetTop >= ship.spaceShip.offsetTop &&
+                // this.coin.offsetTop <= ship.spaceShip.offsetTop+ ship.spaceShip.offsetHeight
+
+                this.coin.offsetLeft + this.coin.offsetWidth >= ship.spaceShip.offsetLeft &&
                 this.coin.offsetLeft <= ship.spaceShip.offsetLeft+ ship.spaceShip.offsetWidth &&
-                this.coin.offsetTop >= ship.spaceShip.offsetTop &&
+                this.coin.offsetTop + this.coin.offsetHeight >= ship.spaceShip.offsetTop &&
                 this.coin.offsetTop <= ship.spaceShip.offsetTop+ ship.spaceShip.offsetHeight
-            )
+
+        )
             {
                 divaudio();
                 // deleting coin
@@ -406,14 +409,14 @@ let controlSpaceShip = function () {
     let movePixel=0;
     if(currentLevel===1)
     {
-       movePixel=20;
+        movePixel=20;
     }
     else if(currentLevel===2)
     {
-       movePixel=30;
+        movePixel=30;
     }
     else if (currentLevel===3) {
-      movePixel=40;
+        movePixel=40;
     }
     //end for level
     if (keyPressed["ArrowRight"]) {
@@ -459,6 +462,38 @@ let timer = function()
     document.getElementById("timeValue").innerText=`${min2}${min1}:${sec2}${sec1}`
 };
 
+let getHighScore = function(){
+    /////////Calculating high score and making the divs///////
+    let highScoreArr =[];
+
+
+    if (playersArr[0].survivalTime!=null || playersArr[1].survivalTime!=null || playersArr[2].survivalTime!=null){
+        let highestScoren=Math.max(...playersArr.map(f => f.highScore));
+        let highestLivesn = Math.max(...playersArr.map(f => f.lives));
+        let highestTimen = Math.max(...playersArr.map(f => f.survivalTime));
+
+        let highestScorePlayer = playersArr.filter(obj => {
+            return obj.highScore === highestScoren;
+    })[0].src;
+        let highestLivePlayer = playersArr.filter(obj => {
+            return obj.lives === highestLivesn;
+    })[0].src;
+        let highestTimePlayer = playersArr.filter(obj => {
+            return obj.survivalTime === highestTimen;
+    })[0].src;
+
+        document.getElementById("highestScore").innerHTML=`<h3 id = "highestScore" class="scoreValue" style="display: inline;float: left">
+The highest Score is ${highestScoren} for <img class = "high"src=${highestScorePlayer} width="40px"></h3>`;
+
+        document.getElementById("highestLive").innerHTML=`<h3 id = "highestScore" class="scoreValue" style="display: inline;float: left">
+The highest Lives is ${highestLivesn} for <img class = "high"src=${highestLivePlayer} width="40px"></h3>`;
+
+        document.getElementById("highestTime").innerHTML=`<h3 id = "highestScore" class="scoreValue" style="display: inline;float: left">
+The highest Survival Time is ${highestTimen} for <img class = "high"src=${highestTimePlayer} width="40px"></h3>`;
+    }
+}
+
+
 let gameOver = function(player) {
     clearInterval(rockInterval);
     clearInterval(controlInterval);
@@ -476,12 +511,10 @@ let gameOver = function(player) {
     if (totalSeconds>player.survivalTime){
         player.survivalTime=totalSeconds;
     }
-
+    gameOverDiv.style.display = "block";
     //local storage
     localStorage.setItem("playersData",JSON.stringify(playersArr));
     // adding the div and onclick function to play or main menu and summary
-
-
 };
 let playersLS = JSON.parse(localStorage.getItem('playersData'));
 
@@ -493,10 +526,11 @@ playerTwo=playersArr[1];
 playerThree=playersArr[2];
 function play(player)
 {
-    document.body.style.backgroundImage = "url('./img/giphy.gif')"; 
+    document.body.style.backgroundImage = "url('./img/giphy.gif')";
     finishSuperPowerFlag=true;
     container.style.display="block";
     document.getElementById("index").style.display="none";
+    document.getElementsByClassName("gameOver")[0].style.display="none";
     // creating a space ship
     ship = new Ship(player.src); //playerSpaceshipSrc
     let fire = null;
@@ -511,6 +545,11 @@ function play(player)
     min1 = 0;
     min2 = 0;
     totalSeconds = 0;
+    lifeDiv.innerText=`Live : ${currentCoin}`;
+    scoreDiv.innerText=`Score : ${currentScore}`;
+    levelDiv.innerText=`Level : ${currentLevel}`;
+    document.getElementById("timeValue").innerText=`${min2}${min1}:${sec2}${sec1}`
+
     //for levels
     let rockTimeInterval=0;
     let fireInterval=0;
@@ -532,31 +571,31 @@ function play(player)
     //end of for levels
     rockInterval = setInterval(() => {new Rock("./img/rock1.gif");}, rockTimeInterval);//here
     liveInterval = setInterval(() => {new Coin("./img/live.gif");}, 10000);
-    fireAttackInterval = setInterval(() => {
+    fireInterval = setInterval(() => {
         if (keyPressed["ControlLeft"]) {
-            fire = new FireBall('./img/fire.gif',"default");
-            playaudio();
+    fire = new FireBall('./img/fire.gif',"default");
+    playaudio();
+}
+    if (superPower && keyPressed["ControlLeft"]){
+        fire = new FireBall('./img/fire.gif',"default");
+        rightFire = new FireBall('./img/fire.gif',"right")  ;
+        leftFire = new FireBall('./img/fire.gif',"left")  ;
+        playaudio();
+        if(finishSuperPowerFlag) {
+            finishSuperPowerFlag = true;
         }
-        if (superPower && keyPressed["ControlLeft"]){
-            fire = new FireBall('./img/fire.gif',"default");
-            rightFire = new FireBall('./img/fire.gif',"right")  ;
-            leftFire = new FireBall('./img/fire.gif',"left")  ;
-            playaudio();
-            if(finishSuperPowerFlag) {
-                finishSuperPowerFlag = true;
-            }
-        }
-        if (superPower && finishSuperPowerFlag){ //to justify when the power interval end
-            finishSuperPowerFlag=false;
-            setTimeout(()=>{superPower=false;finishSuperPowerFlag=true;},5000);
-        }
-    }, fireInterval);
+    }
+    if (superPower && finishSuperPowerFlag){ //to justify when the power interval end
+        finishSuperPowerFlag=false;
+        setTimeout(()=>{superPower=false;finishSuperPowerFlag=true;},5000);
+    }
+}, fireInterval);
     controlInterval = setInterval(()=> {
         controlSpaceShip();
-        if(currentCoin<=0){
-            gameOver(currentPlayer);
-        }
-    },50);
+    if(currentCoin<=0){
+        gameOver(currentPlayer);
+    }
+},50);
     timeInterval = setInterval(timer,1000);
 
 
@@ -564,6 +603,7 @@ function play(player)
 
 
 ///========================Main Menu=================================//
+getHighScore();
 //players information
 let playaudio = function()
 {
@@ -646,31 +686,32 @@ redir.addEventListener("click" , redi);
 s1.addEventListener('click', ()=>{select(1)});
 s2.addEventListener('click', ()=>{select(2)});
 s3.addEventListener('click', ()=>{select(3)});
-/////////Calculating high score and making the divs///////
-let highScoreArr =[];
 
 
-if (playersArr[0].survivalTime!=null && playersArr[1].survivalTime!=null && playersArr[2].survivalTime!=null){
-    let highestScore=Math.max(...playersArr.map(f => f.highScore));
-    let highestLives = Math.max(...playersArr.map(f => f.lives));
-    let highestTime = Math.max(...playersArr.map(f => f.survivalTime));
+//get game over div
+let gameOverBtn = document.getElementById("goHome");
 
-    let highestScorePlayer = playersArr.filter(obj => {
-        return obj.highScore === highestScore;
-    })[0].src;
-    let highestLivePlayer = playersArr.filter(obj => {
-        return obj.lives === highestLives;
-    })[0].src;
-    let highestTimePlayer = playersArr.filter(obj => {
-        return obj.survivalTime === highestTime;
-    })[0].src;
+let goHome = function(){
+    container.removeChild(ship.spaceShip);
+    document.getElementById("container").style.display="none";
+    gameOverDiv.style.display = "none"
+    document.getElementById("index").style.display="block";
+    getHighScore();
 
-    document.getElementById("highestScore").innerHTML=`<h3 id = "highestScore" class="scoreValue" style="display: inline;float: left">
-The highest Score is ${highestScore} for <img class = "high"src=${highestScorePlayer} width="40px"></h3>`;
-
-    document.getElementById("highestLive").innerHTML=`<h3 id = "highestScore" class="scoreValue" style="display: inline;float: left">
-The highest Lives is ${highestLives} for <img class = "high"src=${highestLivePlayer} width="40px"></h3>`;
-
-    document.getElementById("highestTime").innerHTML=`<h3 id = "highestScore" class="scoreValue" style="display: inline;float: left">
-The highest Survival Time is ${highestTime} for <img class = "high"src=${highestTimePlayer} width="40px"></h3>`;
 }
+
+
+gameOverBtn.addEventListener("click",goHome);
+
+
+//get  playAgain
+let playAgainBtn = document.getElementById("playagain");
+
+playAgainBtn.addEventListener("click",()=>{
+    container.removeChild(ship.spaceShip);
+    play(currentPlayer);
+    console.log("hidshaidsa");
+});
+
+
+
