@@ -28,9 +28,11 @@ this is space game that there was rocks fallen from the sky and your ship should
 ### photo of Game
 
 ###### Start Page
-![alt text]()
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/main.png)
 
 ###### Gaming Page
-![alt text]()
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/rock.png)
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/coin.png)
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/fire.png)
 
  
