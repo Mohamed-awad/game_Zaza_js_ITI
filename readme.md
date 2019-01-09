@@ -28,14 +28,14 @@ this is space game that there was rocks fallen from the sky and your ship should
 ### photo of Game
 
 ###### Start Page
-![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/interface.jpg)
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/screens/interface.jpg)
 
 ###### Gaming Page
-![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/game_inside.jpg)
-![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/select_plane.jpg)
-![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/multi_fire.jpg)
-![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/gameover_playagain.jpg)
-![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/exit.jpg)
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/screens/game_inside.jpg)
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/screens/select_plane.jpg)
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/screens/multi_fire.jpg)
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/screens/gameover_playagain.jpg)
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/screens/exit.jpg)
 
 
  
