@@ -12,6 +12,10 @@ let lifeDiv = document.getElementById("liveValue");
 let levelDiv = document.getElementById("levelValue");
 //
 let gameOverDiv = document.getElementsByClassName("gameOver")[0];
+//start of for the mybadge
+let bg=document.getElementById('badge');
+let badge = document.createElement('img');
+//end of for the badge
 
 // coins and score and level
 let currentLevel = 1 ;
@@ -407,11 +411,23 @@ class FireBall {
                     {
                         currentLevel = 3;
                         levelUpSound();
+                        if(currentScore==200)
+                        {
+                          badge.src="./img/startrek2.gif";
+                          //badge.classList.add("mybadge");
+                          //bg.appendChild(badge);
+                        }
                     }
                     else if (currentScore >= 100)
                     {
                         currentLevel = 2;
                         levelUpSound();
+                        if(currentScore==100)
+                        {
+                          badge.src="./img/startrek.gif";
+                          badge.classList.add("mybadge");
+                          bg.appendChild(badge);
+                        }
                     }
                     else
                     {
@@ -745,6 +761,3 @@ playAgainBtn.addEventListener("click",()=>{
     container.removeChild(ship.spaceShip);
     play(currentPlayer);
 });
-
-
-
