@@ -18,7 +18,7 @@ let timelDiv = document.getElementById("timeValue");
 let gameOverDiv = document.getElementsByClassName("gameOver")[0];
 
 // coins and score and level
-let currentLevel = 1;
+let currentLevel = 1 ;
 let currentScore = 0;
 let currentCoin = 10;
 let highestCoin = 0;
@@ -354,7 +354,7 @@ class FireBall {
                     {
                         currentLevel = 1;
                     }
-                    levelDiv.innerText=`Level : ${currentLevel}`;
+                    levelDiv.innerText=`Level : ${currentLevel} /3 `;
 
                     // change flag because fire not exist any more
                     flag = 0;
@@ -547,7 +547,7 @@ function play(player)
     totalSeconds = 0;
     lifeDiv.innerText=`Live : ${currentCoin}`;
     scoreDiv.innerText=`Score : ${currentScore}`;
-    levelDiv.innerText=`Level : ${currentLevel}`;
+    levelDiv.innerText=`Level : ${currentLevel} / 3`;
     document.getElementById("timeValue").innerText=`${min2}${min1}:${sec2}${sec1}`
 
     //for levels
