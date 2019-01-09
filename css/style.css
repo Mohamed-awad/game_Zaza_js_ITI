@@ -3,7 +3,7 @@
 }
 
 body {
-    background-image: url("../img/level one game.gif");
+    background-image: url("../img/level\ one\ game.gif");
     /*background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/600764/space.jpg');*/
     cursor: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/600764/aim_red.png') 17.5 17.5, auto !important;
 
@@ -91,6 +91,7 @@ body {
     height: 90%;
     margin-left: 11%;
 
+
 }
 
 .firstcharacter:hover {
@@ -120,6 +121,7 @@ img:hover {
     filter: drop-shadow(0 0 0.95rem red);
 }
 
+
 /* bootstrap override on classes */
 
 .btn {
@@ -148,6 +150,7 @@ img:hover {
 
 }
 
+
 .value {
     position: relative;
     background-image: linear-gradient(to right, rgba(255, 0, 0, 0), rgb(128, 37, 139));
@@ -173,5 +176,39 @@ img:hover {
 }
 
 .high{
-   filter : none;
+    filter : none;
+}
+
+
+.gameOver {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 440%;
+    display: none;
+}
+
+.gameOver img {
+    width: 100%;
+    height: 100%;
+}
+
+.gameOver div {
+    width: 100%;
+    height: 40%;
+    position: absolute;
+    background-color: blue;
+    top: 20%;
+
+}
+
+
+.finalResult {
+    width: 20%;
+    height: 20%;
+    margin: 2%;
+    background-color: blue;
+    color: ghostwhite;
+
 }
