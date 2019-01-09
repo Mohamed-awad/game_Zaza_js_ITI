@@ -1,58 +1,38 @@
-# My Blog Website
+# ZAZA GAME
 
-this blog web site is web site for publish posts and make comments on it 
+this is space game that there was rocks fallen from the sky and your ship should destroy them before reach to the underground 
 
 ## you can do 
 
-* you can publish posts, make comments, like posts
-* you can see posts for other people
-* you can Subscribe our blog to RSS Feed
-* you can edit or delete your posts
-* you can signup/login/logout with github, facebook, google, instagram
-* you can see api for all apps in this project
-* you can see your information and your posts and posts you liked in your profile page
+* you can see your score, power, your time while playing, currunt level
+* you can increase your power by taking coins that fall from the sky
+* you can increase number of shoots in the same time by increase your power
+* you can have padge on every level in the game
 
 ## Install
 
-* you need to install python3
-* you need to install pip or pip3 package
-
+* you need to install any browser like googleChrome or FireFox
 
 ## Run the project
 
 * download the project 
-* open the project in terminal by press `Ctrl-Alt+T`
-* install virtualenv `pip3 install virtualenv` 
-* init your virtualenv `virtualenv blog_env` 
-* active virtualenv `source env/bin/activate`
-* install required packages on virtualenv `pip3 install -r requirements.txt`
-* enter to blog directory `cd blog`
-* run server `python3 manage.py runserver`
-* open browser on this link `http://127.0.0.1:8000/blog`
-* press on any post to see more details about it
+* enter the project folder
+* press right click on file named index.html 
+* click open with any browser you have
+* the game will open on first page in game 
+* choose your ship then press play now button
+* the page will transport to gaming page
+* you can move left, right, up, down by `arrows in the keyboard`
+* you can shoot by press `ctrl`
 
-### photo of site
+### photo of Game
 
-###### Blog Posts Page
-![alt text](https://github.com/Mohamed-awad/blog/blob/master/blog/blog_app/static/imgs/posts.png)
+###### Start Page
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/main.png)
 
-###### Post Detail Page
-![alt text](https://github.com/Mohamed-awad/blog/blob/master/blog/blog_app/static/imgs/post_detail.png)
+###### Gaming Page
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/rock.png)
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/coin.png)
+![alt text](https://github.com/Mohamed-awad/game_Zaza_js_ITI/blob/master/img/fire.png)
 
-###### Login Page
-![alt text](https://github.com/Mohamed-awad/blog/blob/master/blog/blog_app/static/imgs/login.png)
-
-###### Sign Up Page
-![alt text](https://github.com/Mohamed-awad/blog/blob/master/blog/blog_app/static/imgs/singup.png)
-
-###### Add Post Page
-![alt text](https://github.com/Mohamed-awad/blog/blob/master/blog/blog_app/static/imgs/create.png)
-
-###### Posts Api Page
-![alt text](https://github.com/Mohamed-awad/blog/blob/master/blog/blog_app/static/imgs/posts_api.png)
-
-###### Users Api Page
-![alt text](https://github.com/Mohamed-awad/blog/blob/master/blog/blog_app/static/imgs/user_api.png)
-
-### References
-* this taturial http://muva.co.ke/blog/building-a-blog-application-with-python-3-5-and-django-1-11-4-web-framework/ is the base for build this project 
+ 
