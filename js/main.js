@@ -10,10 +10,6 @@ let lifeDiv = document.getElementById("liveValue");
 
 // get level div
 let levelDiv = document.getElementById("levelValue");
-
-//get time dive
-let timelDiv = document.getElementById("timeValue");
-
 //
 let gameOverDiv = document.getElementsByClassName("gameOver")[0];
 
@@ -22,6 +18,67 @@ let currentLevel = 1;
 let currentScore = 0;
 let currentCoin = 10;
 let highestCoin = 0;
+// Add audios
+let fireSound = function()
+{
+    let audio = document.getElementById("fireSound");
+    audio.currentTime = 0;
+    audio.volume = 0.3;
+    audio.play();
+};
+
+let play_collision_rock = function()
+{
+    let audio = document.getElementById("explosion");
+    audio.currentTime = 0;
+    audio.play();
+};
+
+
+
+let playGameSound = function(mode){
+    let audio = document.getElementById("lowsound");
+    audio.volume = 0.4;
+    if (mode === "play") {
+        audio.play();
+    }
+    else {
+        audio.pause();
+        audio.currentTime = 0;    }
+};
+
+let playMainMenu = function (mode){
+    let audio = document.getElementById("mainMenu");
+    audio.volume = 0.3;
+    if (mode === "play") {
+        audio.play();
+    }
+    else {
+        audio.pause();
+        audio.currentTime = 0;
+    }
+
+};
+playMainMenu("play");
+let divaudio = function()
+{
+    let divadui = document.getElementById("plyspell");
+    divadui.currentTime = 0;
+    divadui.play();
+};
+
+let clickMenu = function()
+{
+    let audio = document.getElementById("menuClick");
+    audio.currentTime = 0;
+    audio.play();
+};
+
+let levelUpSound = function()
+{
+    let audio = document.getElementById("levelUp");
+    audio.play();
+};
 
 //Timer
 let sec1 = null;
@@ -47,14 +104,18 @@ document.addEventListener("keyup", keyReleased);
 let timeInterval  = null ;
 let rockInterval = null;
 let controlInterval = null ;
-let fireAttackInterval = null;
 let liveInterval =null ;
+let fireInterval = null;
 // start rock
 let classImg = document.createElement("img");
 let rocksArray = [];
 //SuperPower
 let superPower = null;
 let finishSuperPowerFlag=null;
+
+//fire and rock speed;
+let rockTimeInterval=Math.floor((Math.random() * 200) + 750);
+let fireTimeInterval=150;
 
 //player class
 class Player
@@ -234,7 +295,7 @@ class Ship {
     constructor(src) {
         this.spaceShip = classImg.cloneNode(true);
         this.spaceShip.src = src;
-        this.spaceShip.setAttribute("style",`position:absolute;top:${window.innerHeight - 140}px;left:${(window.innerWidth - 125) / 2}px;
+        this.spaceShip.setAttribute("style",`position:absolute;top:${window.innerHeight - 170}px;left:${(window.innerWidth - 155) / 2}px;
                                                width:125px;height:140px`);
         container.appendChild(this.spaceShip);
     }
@@ -287,7 +348,7 @@ class FireBall {
         }
         //end level here
         this.interval= setInterval(()=>{this.moveUp(mode)}, fireBallSpeed);
-        playaudio();
+        fireSound();
     }
 
     moveUp(mode)
@@ -345,10 +406,12 @@ class FireBall {
                     if(currentScore >= 200)
                     {
                         currentLevel = 3;
+                        levelUpSound();
                     }
                     else if (currentScore >= 100)
                     {
                         currentLevel = 2;
+                        levelUpSound();
                     }
                     else
                     {
@@ -406,21 +469,29 @@ let controlSpaceShip = function () {
     //               The ArrowRight key is assigned automatically using the event.code as it's explained
     //               in the event listeners functions
     //for level
+
+
     let movePixel=0;
     if(currentLevel===1)
     {
         movePixel=20;
+        rockTimeInterval=Math.floor((Math.random() * 200) + 750);
+        fireTimeInterval=150;
     }
     else if(currentLevel===2)
     {
         movePixel=30;
+        rockTimeInterval=Math.floor((Math.random() * 150) + 600);
+        fireTimeInterval=130;
     }
     else if (currentLevel===3) {
+        rockTimeInterval=Math.floor((Math.random() * 150) + 400);
+        fireTimeInterval=100;
         movePixel=40;
     }
     //end for level
     if (keyPressed["ArrowRight"]) {
-        if (ship.spaceShip.offsetLeft < (window.innerWidth-ship.spaceShip.offsetWidth-10)) {
+        if (ship.spaceShip.offsetLeft < (window.innerWidth-ship.spaceShip.offsetWidth-30)) {
             ship.spaceShip.style.left = `${ship.spaceShip.offsetLeft += movePixel}px`;
         }
     }
@@ -430,7 +501,7 @@ let controlSpaceShip = function () {
         }
     }
     if (keyPressed["ArrowDown"]) {
-        if (ship.spaceShip.offsetTop < (window.innerHeight-ship.spaceShip.offsetHeight-15)) {
+        if (ship.spaceShip.offsetTop < (window.innerHeight-ship.spaceShip.offsetHeight-30)) {
             ship.spaceShip.style.top = `${ship.spaceShip.offsetTop += movePixel}px`;
         }
     }
@@ -498,7 +569,7 @@ let gameOver = function(player) {
     clearInterval(rockInterval);
     clearInterval(controlInterval);
     clearInterval(liveInterval);
-    clearInterval(fireAttackInterval);
+    clearInterval(fireInterval);
     clearInterval(timeInterval);
     //Checking high score
     if (currentScore>player.highScore){
@@ -526,6 +597,8 @@ playerTwo=playersArr[1];
 playerThree=playersArr[2];
 function play(player)
 {
+    playMainMenu("stop");
+    playGameSound("play");
     document.body.style.backgroundImage = "url('./img/giphy.gif')";
     finishSuperPowerFlag=true;
     container.style.display="block";
@@ -550,37 +623,19 @@ function play(player)
     levelDiv.innerText=`Level : ${currentLevel}`;
     document.getElementById("timeValue").innerText=`${min2}${min1}:${sec2}${sec1}`
 
-    //for levels
-    let rockTimeInterval=0;
-    let fireInterval=0;
-    if(currentLevel===1)
-    {
-        rockTimeInterval=1000;
-        fireInterval=150;
-    }
-    else if(currentLevel===2)
-    {
-        rockTimeInterval=600;
-        fireInterval=130;
-    }
-    else if (currentLevel===3)
-    {
-        rockTimeInterval=400;
-        fireInterval=100;
-    }
     //end of for levels
     rockInterval = setInterval(() => {new Rock("./img/rock1.gif");}, rockTimeInterval);//here
     liveInterval = setInterval(() => {new Coin("./img/live.gif");}, 10000);
     fireInterval = setInterval(() => {
         if (keyPressed["ControlLeft"]) {
     fire = new FireBall('./img/fire.gif',"default");
-    playaudio();
+    fireSound();
 }
     if (superPower && keyPressed["ControlLeft"]){
         fire = new FireBall('./img/fire.gif',"default");
         rightFire = new FireBall('./img/fire.gif',"right")  ;
         leftFire = new FireBall('./img/fire.gif',"left")  ;
-        playaudio();
+        fireSound();
         if(finishSuperPowerFlag) {
             finishSuperPowerFlag = true;
         }
@@ -589,7 +644,7 @@ function play(player)
         finishSuperPowerFlag=false;
         setTimeout(()=>{superPower=false;finishSuperPowerFlag=true;},5000);
     }
-}, fireInterval);
+}, fireTimeInterval);
     controlInterval = setInterval(()=> {
         controlSpaceShip();
     if(currentCoin<=0){
@@ -604,42 +659,19 @@ function play(player)
 
 ///========================Main Menu=================================//
 getHighScore();
-//players information
-let playaudio = function()
-{
-    let audio = document.getElementById("playsound");
-    audio.currentTime = 0;
-    audio.play();
-};
 
-let play_collision_rock = function()
-{
-    let audio = document.getElementById("explosion");
-    audio.currentTime = 0;
-    audio.play();
-};
-
-
-let bb = document.getElementById("playbtn");
-
-bb.addEventListener("mouseover" , playaudio);
-
-let lowsounds = document.getElementById("lowsound");
-lowsounds.volume = .1;
-
-let divaudio = function()
-{
-    let divadui = document.getElementById("plyspell");
-    divadui.play();
-};
+let playNow = document.getElementById("playbtn");
+ playNow.addEventListener("mouseover" , clickMenu);
+let exitSound = document.getElementById("clos");
+exitSound.addEventListener("mouseover" , clickMenu);
 
 let fircharacter = document.getElementById("firchar");
 let secondcharacter = document.getElementById("secchar");
 let thirdcharacter = document.getElementById("thirchar");
 
-fircharacter.addEventListener("mouseover" , divaudio);
-secondcharacter.addEventListener("mouseover" , divaudio);
-thirdcharacter.addEventListener("mouseover" , divaudio);
+fircharacter.addEventListener("mouseover" , clickMenu);
+secondcharacter.addEventListener("mouseover" , clickMenu);
+thirdcharacter.addEventListener("mouseover" , clickMenu);
 
 
 function closeWin() {
@@ -694,11 +726,13 @@ let gameOverBtn = document.getElementById("goHome");
 let goHome = function(){
     container.removeChild(ship.spaceShip);
     document.getElementById("container").style.display="none";
-    gameOverDiv.style.display = "none"
+    gameOverDiv.style.display = "none";
     document.getElementById("index").style.display="block";
     getHighScore();
+    playGameSound("stop");
+    playMainMenu("play");
 
-}
+};
 
 
 gameOverBtn.addEventListener("click",goHome);
@@ -710,7 +744,6 @@ let playAgainBtn = document.getElementById("playagain");
 playAgainBtn.addEventListener("click",()=>{
     container.removeChild(ship.spaceShip);
     play(currentPlayer);
-    console.log("hidshaidsa");
 });
 
 
