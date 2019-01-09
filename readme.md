@@ -4,14 +4,14 @@ this is space game that there was rocks fallen from the sky and your ship should
 
 ## you can do 
 
-* you can see your score, power, your time while playing, currunt level
+* you can see your score, power, your time while playing, current level
 * you can increase your power by taking coins that fall from the sky
 * you can increase number of shoots in the same time by increase your power
-* you can have padge on every level in the game
+
 
 ## Install
-* the game is faster on chrome browser .
-* you need to install any browser like googleChrome or FireFox (has some lag)
+* the game is faster and more compatible on chrome browser  .
+* you need to install any browser like googleChrome or FireFox (has some lag on firefox)
 
 ## Run the project
 
