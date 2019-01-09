@@ -50,7 +50,7 @@ document.addEventListener("keyup", keyReleased);
 let timeInterval  = null ;
 let rockInterval = null;
 let controlInterval = null ;
-let fireInterval = null;
+let fireAttackInterval = null;
 let liveInterval =null ;
 // start rock
 let classImg = document.createElement("img");
@@ -162,7 +162,7 @@ class Rock
                         imgcollisionSpace_Rocks.currentVolcano.remove();
                         spaceCrashArray.splice(j, 1);
                     }
-                },1000);
+                },200);
             }
         }
     }
@@ -270,15 +270,15 @@ class FireBall {
 
         //start level here
         let fireBallSpeed=0;
-        if(currentLevel==1)
+        if(currentLevel===1)
         {
             fireBallSpeed=20;
         }
-        else if(currentLevel==2)
+        else if(currentLevel===2)
         {
             fireBallSpeed=15;
         }
-        else if(currentLevel==3)
+        else if(currentLevel===3)
         {
             fireBallSpeed=10;
         }
@@ -290,7 +290,7 @@ class FireBall {
     moveUp(mode)
     {
         // remove when arrive to the top
-        if(this.fireBall.offsetTop < 50)
+        if(this.fireBall.offsetTop < 30||(this.fireBall.offsetLeft>window.innerWidth-40)||this.fireBall.offsetLeft<30)
         {
             clearInterval(this.interval);
             container.removeChild(this.fireBall);
@@ -417,7 +417,7 @@ let controlSpaceShip = function () {
     }
     //end for level
     if (keyPressed["ArrowRight"]) {
-        if (ship.spaceShip.offsetLeft < (window.innerWidth-ship.spaceShip.offsetWidth-movePixel)) {
+        if (ship.spaceShip.offsetLeft < (window.innerWidth-ship.spaceShip.offsetWidth-10)) {
             ship.spaceShip.style.left = `${ship.spaceShip.offsetLeft += movePixel}px`;
         }
     }
@@ -427,7 +427,7 @@ let controlSpaceShip = function () {
         }
     }
     if (keyPressed["ArrowDown"]) {
-        if (ship.spaceShip.offsetTop < (window.innerHeight-ship.spaceShip.offsetHeight)) {
+        if (ship.spaceShip.offsetTop < (window.innerHeight-ship.spaceShip.offsetHeight-15)) {
             ship.spaceShip.style.top = `${ship.spaceShip.offsetTop += movePixel}px`;
         }
     }
@@ -463,7 +463,7 @@ let gameOver = function(player) {
     clearInterval(rockInterval);
     clearInterval(controlInterval);
     clearInterval(liveInterval);
-    clearInterval(fireInterval);
+    clearInterval(fireAttackInterval);
     clearInterval(timeInterval);
     //Checking high score
     if (currentScore>player.highScore){
@@ -532,7 +532,7 @@ function play(player)
     //end of for levels
     rockInterval = setInterval(() => {new Rock("./img/rock1.gif");}, rockTimeInterval);//here
     liveInterval = setInterval(() => {new Coin("./img/live.gif");}, 10000);
-    fireInterval = setInterval(() => {
+    fireAttackInterval = setInterval(() => {
         if (keyPressed["ControlLeft"]) {
             fire = new FireBall('./img/fire.gif',"default");
             playaudio();
@@ -575,6 +575,7 @@ let playaudio = function()
 let play_collision_rock = function()
 {
     let audio = document.getElementById("explosion");
+    audio.currentTime = 0;
     audio.play();
 };
 
@@ -645,3 +646,31 @@ redir.addEventListener("click" , redi);
 s1.addEventListener('click', ()=>{select(1)});
 s2.addEventListener('click', ()=>{select(2)});
 s3.addEventListener('click', ()=>{select(3)});
+/////////Calculating high score and making the divs///////
+let highScoreArr =[];
+
+
+if (playersArr[0].survivalTime!=null && playersArr[1].survivalTime!=null && playersArr[2].survivalTime!=null){
+    let highestScore=Math.max(...playersArr.map(f => f.highScore));
+    let highestLives = Math.max(...playersArr.map(f => f.lives));
+    let highestTime = Math.max(...playersArr.map(f => f.survivalTime));
+
+    let highestScorePlayer = playersArr.filter(obj => {
+        return obj.highScore === highestScore;
+    })[0].src;
+    let highestLivePlayer = playersArr.filter(obj => {
+        return obj.lives === highestLives;
+    })[0].src;
+    let highestTimePlayer = playersArr.filter(obj => {
+        return obj.survivalTime === highestTime;
+    })[0].src;
+
+    document.getElementById("highestScore").innerHTML=`<h3 id = "highestScore" class="scoreValue" style="display: inline;float: left">
+The highest Score is ${highestScore} for <img class = "high"src=${highestScorePlayer} width="40px"></h3>`;
+
+    document.getElementById("highestLive").innerHTML=`<h3 id = "highestScore" class="scoreValue" style="display: inline;float: left">
+The highest Lives is ${highestLives} for <img class = "high"src=${highestLivePlayer} width="40px"></h3>`;
+
+    document.getElementById("highestTime").innerHTML=`<h3 id = "highestScore" class="scoreValue" style="display: inline;float: left">
+The highest Survival Time is ${highestTime} for <img class = "high"src=${highestTimePlayer} width="40px"></h3>`;
+}
