@@ -10,8 +10,8 @@ this is space game that there was rocks fallen from the sky and your ship should
 * you can have padge on every level in the game
 
 ## Install
-
-* you need to install any browser like googleChrome or FireFox
+* the game is faster on chrome browser .
+* you need to install any browser like googleChrome or FireFox (has some lag)
 
 ## Run the project
 
